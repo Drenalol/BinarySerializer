@@ -22,12 +22,6 @@ namespace Drenalol.Binary.Attributes
         public bool? Reverse { get; set; }
 
         /// <summary>
-        /// Sets the property type for the serializer.
-        /// </summary>
-        [Obsolete]
-        public Type Type { get; set; }
-        
-        /// <summary>
         /// Sets the serialization rule for this property.
         /// </summary>
         public BinaryDataType BinaryDataType { get; set; }

@@ -7,7 +7,7 @@ namespace Drenalol.Binary.Infrastracture.Implementations
 {
     public sealed class StandartBinarySerializer : IBinarySerializer
     {
-        public ISerializeResult Serialize<TData>(TData data, BinarySerializerContext context) => InternalSerialize(data, context);
+        public ISerializeResult Serialize(object data, BinarySerializerContext context) => InternalSerialize(data, context);
 
         private static StandartSerializeResult InternalSerialize(object data, BinarySerializerContext context)
         {
@@ -49,14 +49,14 @@ namespace Drenalol.Binary.Infrastracture.Implementations
                 realLength = context.ReflectionData.MetaLength;
 
             var serializeResult = new StandartSerializeResult(realLength, composeSerializeResult);
-            var bytes = serializeResult.BytesResult;
+            var bytes = serializeResult.Bytes;
 
             foreach (var property in context.ReflectionData.Properties)
             {
                 if (!property.Type.IsPrimitive && property.Attribute.BinaryDataType == BinaryDataType.Compose && composeSerializeResult != null)
                 {
                     Array.Copy(
-                        composeSerializeResult.BytesResult,
+                        composeSerializeResult.Bytes,
                         0,
                         bytes,
                         property.Attribute.Index,

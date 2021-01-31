@@ -163,7 +163,7 @@ namespace Drenalol.BinSerializer.Tests
                 Task.Run(() =>
                 {
                     var serialize = binarySerializer.Serialize(mock);
-                    _ = binarySerializer.Deserialize<uint, AttributeMockSerialize>(new ReadOnlySequence<byte>(serialize.BytesResult));
+                    _ = binarySerializer.Deserialize<uint, AttributeMockSerialize>(new ReadOnlySequence<byte>(serialize.Result));
                 });
         }
 

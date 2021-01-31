@@ -25,7 +25,7 @@ namespace Drenalol.BinSerializer.Tests
 
             var serialize = binarySerializer.Serialize(ethalon);
             Assert.IsTrue(serialize.Length == ethalon.Size + ethalonHeaderLength);
-            var deserialize = binarySerializer.Deserialize<long, Mock>(new ReadOnlySequence<byte>(serialize.BytesResult));
+            var deserialize = binarySerializer.Deserialize<long, Mock>(new ReadOnlySequence<byte>(serialize.Result));
             Assert.IsTrue(ethalon.Equals(deserialize.Result));
         }
 
@@ -38,7 +38,7 @@ namespace Drenalol.BinSerializer.Tests
 
             var serialize = binarySerializer.Serialize(ethalon);
             Assert.IsTrue(serialize.Length == ethalon.Size + ethalonHeaderLength);
-            var deserialize = await binarySerializer.DeserializeAsync<long, Mock>(PipeReader.Create(new MemoryStream(serialize.BytesResult)), CancellationToken.None);
+            var deserialize = await binarySerializer.DeserializeAsync<long, Mock>(PipeReader.Create(new MemoryStream(serialize.Result.ToArray())), CancellationToken.None);
             Assert.IsTrue(ethalon.Equals(deserialize.Result));
             serialize.Dispose();
         }
@@ -162,7 +162,7 @@ namespace Drenalol.BinSerializer.Tests
             );
             
             var serialize = binarySerializer.Serialize(mock);
-            var data = binarySerializer.Deserialize<long, RecursiveMock<RecursiveMock<RecursiveMock<MockOnlyMetaData>>>>(new ReadOnlySequence<byte>(serialize.BytesResult));
+            var data = binarySerializer.Deserialize<long, RecursiveMock<RecursiveMock<RecursiveMock<MockOnlyMetaData>>>>(new ReadOnlySequence<byte>(serialize.Result));
             Assert.NotNull(data);
         }
         
@@ -180,7 +180,7 @@ namespace Drenalol.BinSerializer.Tests
             );
             
             var serialize = binarySerializer.Serialize(mock);
-            var pipe = PipeReader.Create(new MemoryStream(serialize.BytesResult));
+            var pipe = PipeReader.Create(new MemoryStream(serialize.Result.ToArray()));
             var data = await binarySerializer.DeserializeAsync<long, RecursiveMock<RecursiveMock<RecursiveMock<MockOnlyMetaData>>>>(pipe, CancellationToken.None);
             Assert.NotNull(data);
         }
@@ -192,7 +192,7 @@ namespace Drenalol.BinSerializer.Tests
             
             var mock = RecursiveMock<int>.Create(1337);
             var serialize = binarySerializer.Serialize(mock);
-            var data = binarySerializer.Deserialize<long, RecursiveMock<int>>(new ReadOnlySequence<byte>(serialize.BytesResult));
+            var data = binarySerializer.Deserialize<long, RecursiveMock<int>>(new ReadOnlySequence<byte>(serialize.Result));
             
             Assert.NotNull(data);
             Assert.AreEqual(mock.Id, data.Identifier);
@@ -208,7 +208,7 @@ namespace Drenalol.BinSerializer.Tests
             
             var mock = RecursiveMock<int>.Create(1337);
             var serialize = binarySerializer.Serialize(mock);
-            var pipe = PipeReader.Create(new MemoryStream(serialize.BytesResult));
+            var pipe = PipeReader.Create(new MemoryStream(serialize.Result.ToArray()));
             var data = await binarySerializer.DeserializeAsync<long, RecursiveMock<int>>(pipe, CancellationToken.None);
             
             Assert.NotNull(data);
@@ -290,7 +290,7 @@ namespace Drenalol.BinSerializer.Tests
             
             for (var i = 0; i < 10000; i++)
             {
-                var pipe = PipeReader.Create(new MemoryStream(serialize.BytesResult));
+                var pipe = PipeReader.Create(new MemoryStream(serialize.Result.ToArray()));
                 sw.Start();
                 var data = await binarySerializer.DeserializeAsync<long, RecursiveMock<RecursiveMock<RecursiveMock<RecursiveMock<RecursiveMock<int>>>>>>(pipe, CancellationToken.None);
                 sw.Stop();
@@ -323,7 +323,7 @@ namespace Drenalol.BinSerializer.Tests
             
             for (var i = 0; i < 10000; i++)
             {
-                var sequence = new ReadOnlySequence<byte>(serialize.BytesResult);
+                var sequence = new ReadOnlySequence<byte>(serialize.Result);
                 sw.Start();
                 var data = binarySerializer.Deserialize<long, RecursiveMock<RecursiveMock<RecursiveMock<RecursiveMock<RecursiveMock<int>>>>>>(sequence);
                 sw.Stop();

@@ -15,7 +15,7 @@ namespace Drenalol.Binary.Infrastracture.Implementations
             _arrayPool = ArrayPool<byte>.Create(); 
         }
         
-        public ISerializeResult Serialize<TData>(TData data, BinarySerializerContext context) => InternalSerialize(data, context);
+        public ISerializeResult Serialize(object data, BinarySerializerContext context) => InternalSerialize(data, context);
 
         private ArrayPoolSerializeResult InternalSerialize(object data, BinarySerializerContext context)
         {

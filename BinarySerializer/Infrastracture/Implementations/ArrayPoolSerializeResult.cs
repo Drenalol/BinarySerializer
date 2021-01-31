@@ -6,8 +6,7 @@ namespace Drenalol.Binary.Infrastracture.Implementations
     public class ArrayPoolSerializeResult : ISerializeResult
     {
         public int Length { get; }
-        public byte[] BytesResult => BytesRented[..Length];
-        public ReadOnlyMemory<byte> MemoryResult => new ReadOnlyMemory<byte>(BytesRented, 0, Length);
+        public ReadOnlyMemory<byte> Result => new ReadOnlyMemory<byte>(BytesRented, 0, Length);
         public byte[] BytesRented { get; }
         
         private readonly ArrayPoolSerializeResult _composeArrayPoolSerializeResult;
